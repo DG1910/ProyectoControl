@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns="http://www.w3.org/1999/xhtml"
+       >
+    <head>
+        <title>Agregar o Modificar Personas</title>
+        <meta charset="UTF-8"/>
+        <!--        <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
+        <style>
+            body{
+                padding: 10px;
+            }
+            .spanError{
+                color: red;
+                font-size: 10pt;
+            }
+        </style>
+    </head>
+
+    <body  style="margin: 50px auto; width: 40%">
+
+        <header th:replace="layout/plantilla :: header"></header>
+
+        <h2>[[#{persona.formulario}]]</h2>
+        <br/>
+
+        <!--formulario-->
+        <form th:action="@{/guardar}" method="post" th:object="${persona}"}>
+            <input type="hidden" name="id" th:field="*{id}"/>
+            <br/>
+
+            <div class="row mb-3">
+                <label for="nombre" class="col-sm-2 col-form-label">[[#{persona.nombre}]]: </label>
+                <div class="col-sm-10">
+                    <input type="text" name="nombre" th:field="*{nombre}" class="form-control" autofocus="autofocus" placeholder="Nombre"/>
+
+                    <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="spanError">Error nombre</span>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+                <label for="apellidos"  class="col-sm-2 col-form-label">[[#{persona.apellidos}]]: </label>
+                <div class="col-sm-10">
+                    <input type="text" name="apellidos" th:field="*{apellidos}"  class="form-control"  placeholder="Apellidos"/>
+
+                    <span th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" class="spanError">Error apellidos</span>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+                <label for="email"  class="col-sm-2 col-form-label">[[#{persona.email}]]: </label>
+                <div class="col-sm-10">
+                    <input type="text" name="email" th:field="*{email}"  class="form-control"  placeholder="Correo electrónico"/>
+
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="spanError">Error email</span>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+                <label for="telefono"  class="col-sm-2 col-form-label">[[#{persona.telefono}]]: </label>
+                <div class="col-sm-10">
+                    <input type="text" name="telefono" th:field="*{telefono}" class="form-control"  placeholder="Teléfono"/>
+                </div>
+
+            </div>
+            <br/>
+            <a th:href="@{/}" class="btn btn-danger"><- [[#{accion.regresar}]]</a> | 
+            <input type="submit" th:value="#{accion.guardar}" name="" class="btn btn-primary" />
+        </form>
+
+
+        <footer th:replace="layout/plantilla :: footer">
+
+        </footer>
+    </body>
+</html>

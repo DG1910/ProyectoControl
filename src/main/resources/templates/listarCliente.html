@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring.security"
+       >
+    <head>
+        <title>Listado Clientes</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <section th:fragment="listadoClientes" id="clientes">
+            <div class="container"  >
+                <div class="row"    >
+                    <div class="col-md-9"  style="margin: 0 auto;" >
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+<!--                                <i th:replace="layout/plantillas :: icon-settings"></i>-->
+                                <h4>[[#{persona.titulo-lista}]]</h4>
+                            </div>
+                            <div th:if="${personas != null and !personas.empty} " class="card-body">
+
+                                <table class="table table-striped caption-top table-hover">
+                                    <caption>Lista de clientes</caption>
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th > # </th>
+                                            <th th:text="#{persona.nombre}"> Nombres </th>
+                                            <th th:text="#{persona.saldo}"> Saldo </th>
+                                            <th th:text="#{persona.email}"> email </th>
+                                            <th th:text="#{persona.telefono}"> telefono </th>
+                                            <th th:text="#{accion.acciones}"  sec:authorize="hasRole('ROLE_ADMIN')"  >acciones</th>
+                                        </tr>                                        
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="p, c:${personas}">
+                                            <td class="align-middle" >[[${c.count}]]</td>
+                                            <td class="align-middle" th:text="${p.nombre +' '+p.apellidos}"></td>
+                                            <td class="align-middle" th:text="${new java.text.DecimalFormat('$#,##0.00').format(p.saldo)}"></td>
+                                            <td class="align-middle" th:text="${p.email}"></td>
+                                            <td class="align-middle" th:text="${p.telefono}"></td>
+                                            <td class="align-middle" sec:authorize="hasRole('ROLE_ADMIN')" >
+                                                <a th:href="@{/index/} + ${p.id}" data-bs-toggle="modal" data-bs-target="#agregarCliente"
+                                                   id="btnEditar"
+
+                                                   th:attr="data-id=${p.id},
+                                                   data-nombre=${p.nombre},
+                                                   data-apellidos=${p.apellidos},
+                                                   data-saldo=${p.saldo},
+                                                   data-email=${p.email},
+                                                   data-telefono=${p.telefono}
+                                                   "
+                                                   ><i class="fa-regular fa-pen-to-square fw-normal fs-5 text-success"></i></a> |
+                                                <a th:href="@{/eliminar/} + ${p.id}" data-bs-toggle="modal" data-bs-target="#modal-eliminar"
+                                                   id="btnEliminar" 
+                                                   th:attr="
+                                                   data-id_delete =${p.id}"
+                                                   ><i class="fa-regular fa-trash-can fw-normal fs-5 text-danger"></i></a>
+                                            </td>
+                                        </tr>                                        
+                                    </tbody>
+
+                                </table>
+
+                                <div class="alert alert-warning" th:if="${personas == null and personas.empty }">
+                                    <strong>¡AVISO!</strong> No se encontraron registros
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="col-md-3"  style="margin: 0 auto;" >
+                        <div class="card text-center bg-danger text-white mb-3">
+
+                            <div class="card-body">
+                                <h3 th:text="#{persona.saldo-total}"></h3>
+                                <h4 class="display-5"> [[${new java.text.DecimalFormat('$#,##0.00').format(saldo_total)}]]</h4>
+                            </div>                           
+
+                        </div>
+                        <div class="card text-center bg-primary text-white mb-3">
+
+                            <div class="card-body">
+                                <h3 th:text="#{persona.cantidad}"></h3>
+                                <h4 class="display-6"><i class="fa-solid fa-users"></i>  [[${cantidad_personas}]]</h4>
+                            </div>                           
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

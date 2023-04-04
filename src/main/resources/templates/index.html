@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring.security"
+       >
+    <head  th:replace="layout/plantilla :: head">
+        <title>Esto es un HTML</title>
+        <meta charset="UTF-8"/>
+
+
+        <style>
+            body{
+                padding: 10px;
+            }
+            .bg-light{
+                background-color: #0068AB!important;
+            }
+            .navbar-light .navbar-nav .nav-link{
+                color: white;
+            }
+            .dropdown-item{
+                background-color: transparent;
+                color: white;
+            }
+            .navbar-expand-lg .navbar-nav .dropdown-menu{
+                background-color: #0068AB;
+            }
+            .navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover{
+                font-weight: bold;
+                color: white;
+            }
+            .navbar-expand-lg .navbar-collapse{
+                margin: 0 auto;
+                flex-grow: 0;
+            }
+        </style>
+    </head>
+    <body style="width: 70%; margin: 0 auto;">
+        <main th:replace="layout/plantilla :: main">
+
+        </main>
+        <BR/>
+        <header th:replace="layout/plantilla :: header"></header>
+
+        <br/>
+        <!--        <a th:href="@{/agregar}" class="btn btn-primary">Crear Persona</a>-->
+        <!--        <a th:href="@{/agregar}" class="btn btn-primary" >[[#{persona.crear}]]</a>-->
+        <section th:replace="agregarCliente :: btn-agregar-cliente"></section>
+
+        <section th:replace="agregarCliente :: modal-agregar-cliente"></section>
+
+        <section>
+            <div class="modal fade" id="modal-eliminar" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title text-secondary" id="">Eliminar Cliente</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <h5 class="text-secondary">¿Está seguro de querer eliminar el cliente seleccionado?</h5>
+                            <p>Esta acción no puede revertirse.</p>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <a th:href="@{/}" type="submit" class="btn btn-danger" id="btnEliminarFinal">Eliminar</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!<!-- OTRA FORMA DE HACER LISTADO -->
+        <section th:replace="listarCliente :: listadoClientes"></section>
+
+      
+
+        <!-- Tabla de PERSONAS -->
+<!--        <div th:if="${personas != null and !personas.empty}">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>[[#{persona.nombre}]]</th>
+                        <th>[[#{persona.apellidos}]]</th>
+                        <th>[[#{persona.email}]]</th>
+                        <th>[[#{persona.telefono}]]</th>
+                        <th sec:authorize="hasRole('ROLE_ADMIN')" >[[#{accion.editar}]]</th>
+                        <th sec:authorize="hasRole('ROLE_ADMIN')" >[[#{accion.eliminar}]]</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="persona : ${personas}">
+                        <td th:text="${persona.nombre}">Mostrar nombre</td>
+                        <td th:text="${persona.apellidos}">Mostrar Apellidos</td>
+                        <td th:text="${persona.email}">Mostrar email</td>
+                        <td th:text="${persona.telefono}">Mostrar Telefono</td>
+                        <td>
+                            <a sec:authorize="hasRole('ROLE_ADMIN')"  th:href="@{/editar/} + ${persona.id}" class="btn btn-success">
+                                [[#{accion.editar}]]
+                            </a>
+                        </td>
+                        <td>
+                            <a sec:authorize="hasRole('ROLE_ADMIN')"  th:href="@{/eliminar/} + ${persona.id}" class="btn btn-danger">
+                                [[#{accion.eliminar}]]
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <strong><p th:text="${mensaje}"></p></strong>
+        </div>
+        <div th:if="${personas == null or personas.empty}">
+            [[#{persona.lista-vacia}]]
+        </div>-->
+
+        <footer th:replace="layout/plantilla :: footer">
+
+        </footer>
+
+
+        <script type="text/javascript">
+            /*enviar los valores de la fila seleccionada al modal agregar-modificar*/
+            $(document).on("click", "#btnEditar", function () {
+                var id = $(this).data('id');
+                var nom = $(this).data('nombre');
+                var ape = $(this).data('apellidos');
+                var sal = $(this).data('saldo');
+                var email = $(this).data('email');
+                var tel = $(this).data('telefono');
+
+                $("#id").val(id);
+                $("#nom").val(nom);
+                $("#ape").val(ape);
+                $("#email").val(email);
+                $("#tel").val(tel);
+                $("#saldo").val(sal);
+            });
+
+            /*limpia los controles del modal si a sido */
+            $(document).on("click", "#btnAdd", function () {
+                $("#id").val('');
+                $("#nom").val('');
+                $("#ape").val('');
+                $("#email").val('');
+                $("#tel").val('');
+                $("#saldo").val('');
+            });
+
+            $(document).on("click", "#btnEliminar", function () {
+                var id_delete = $(this).data('id_delete');
+
+                $("#id_delete").val(id_delete);
+                console.log(id_delete);
+
+                $('#btnEliminarFinal').attr('href', '/eliminar/' + id_delete);
+                console.log($('#btnEliminarFinal').attr('href'));
+            });
+
+            $(function () {
+                $('#agregarCliente').on('shown.bs.modal', function () {
+                    $('#nom').trigger('focus');
+                    console.log('holoa');
+                });
+            });
+        </script>
+
+    </body>
+</html>
